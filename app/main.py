@@ -8,5 +8,5 @@ app.include_router(tree.router)
 
 
 @app.get("/")
-def hello():
-    return {"msg": "hello"}
+def main():
+    return {"msg": "Hello World"}

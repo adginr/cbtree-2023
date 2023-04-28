@@ -9,7 +9,7 @@ restaurants) ) ) ) ) ) ) )"""
 
 
 def test_class_initialization():
-    process_tree = ProcessTree(query=query)
+    process_tree = ProcessTree(query=query, limit=20)
     assert isinstance(process_tree.tree, tree.Tree)
 
     process_tree._get_nps(process_tree.tree)
