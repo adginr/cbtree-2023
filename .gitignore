@@ -6,5 +6,6 @@ __pycache__
 *.lock
 *.ipynb
 
+.pytest_cache
 
 

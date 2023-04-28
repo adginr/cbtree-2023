@@ -3,7 +3,7 @@ name = "cbtree"
 version = "0.1.0"
 description = ""
 authors = ["Your Name <you@example.com>"]
-license = "n"
+license = ""
 readme = "README.md"
 
 [tool.poetry.dependencies]
@@ -14,6 +14,7 @@ nltk = "^3.8.1"
 svgling = "^0.3.1"
 fastapi = "^0.95.1"
 uvicorn = "^0.21.1"
+pytest = "^7.3.1"
 
 
 [tool.poetry.group.dev.dependencies]
