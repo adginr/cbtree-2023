@@ -3,16 +3,16 @@
 ## Requirements
 
 ```sh
-# Check wether docker is installed by running
+# Check whether docker is installed by running
 docker run hello-world
 ```
 
 ## Install
 
 ```sh
-git clone https://github.com/adginr/cbtree-2023.git
+git clone https://github.com/adginr/cbtree-2023.git && cd  cbtree-2023
 # or via ssh
-git clone git@github.com:adginr/cbtree-2023.git
+git clone git@github.com:adginr/cbtree-2023.git && cd cbtree-2023
 ```
 
 ## Run with docker `Recomended`
