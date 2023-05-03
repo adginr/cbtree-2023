@@ -47,6 +47,12 @@ uvicorn app.main:app --port 8080
 pytest
 ```
 
+### Run mypy
+
+```sh
+mypy --strict app
+```
+
 ## Description
 
 CBTree - Constituency-based parse trees
