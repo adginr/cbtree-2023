@@ -1,7 +1,7 @@
 from fastapi.testclient import TestClient
 import urllib.parse
 from app.main import app
-import pytest
+from app.scheme import ParaphraseResponse
 
 client = TestClient(app)
 
@@ -34,13 +34,13 @@ limit = 2
 q = urllib.parse.quote(f"{query}")
 
 
-def test_read_main():
+def test_read_main() -> None:
     response = client.get("/")
     assert response.status_code == 200
     assert response.json() == {"msg": "Hello World"}
 
 
-def test_paraphrase_success():
+def test_paraphrase_success() -> None:
     response = client.get(f"/paraphrase?query={q}&limit={limit}")
     assert response.status_code == 200
     data = response.json()
@@ -54,14 +54,14 @@ def test_paraphrase_success():
     assert data["paraphrase"][0]["text"] in expected_list
 
     # Each text is unique
-    all_text = list(map(lambda x: x["text"], data["paraphrase"]))
+    all_text = list(map(lambda x: x["text"], data["paraphrase"]))  # type: ignore
     assert len(set(all_text)) == len(all_text)
 
 
 query_2 = urllib.parse.quote(f"(S(NP(NN query)))")
 
 
-def test_paraphrase_non_result():
+def test_paraphrase_non_result() -> None:
     response = client.get(f"/paraphrase?query={query_2}")
     assert response.status_code == 200
     data = response.json()
@@ -69,7 +69,7 @@ def test_paraphrase_non_result():
     assert len(data["paraphrase"]) == 0
 
 
-def test_paraphrase_invalid_input():
+def test_paraphrase_invalid_input() -> None:
     response = client.get(f"/paraphrase?query=sdfasdf333)))")
     assert response.status_code == 422
     data = response.json()

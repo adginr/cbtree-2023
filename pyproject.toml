@@ -20,6 +20,15 @@ httpx = "^0.24.0"
 
 [tool.poetry.group.dev.dependencies]
 rich = "^13.3.4"
+mypy = "^1.2.0"
+
+[tool.mypy]
+python_version = "3.11"
+
+[[tool.mypy.overrides]]
+module = 'nltk'
+ignore_missing_imports = true
+
 
 [build-system]
 requires = ["poetry-core"]

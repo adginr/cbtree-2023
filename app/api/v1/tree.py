@@ -1,22 +1,22 @@
-from typing import Optional
 from fastapi import APIRouter, Request, HTTPException
 from app.service import ProcessTree
-
+from pydantic import ValidationError
 from app.scheme import ParaphraseResponse, ParaphraseRequest
 
 router = APIRouter()
 
+LIMIT = 20
 
-@router.get("/paraphrase")
+
+@router.get("/paraphrase", response_model=ParaphraseResponse)
 def paraphrase(
-    request: Request, query: str, limit: Optional[int] = 20
-) -> ParaphraseResponse:
-    # Non-negative limit
+    request: Request, query: str, limit: int = LIMIT
+) -> dict[str, list[dict[str, str]]]:
     try:
         ParaphraseRequest(query=query, limit=limit)
-    except ValueError as exc:
+    except ValidationError as exc:
         raise HTTPException(status_code=422, detail=exc.errors())
 
-    limit = limit if limit > 0 else 20
     unique_btress = ProcessTree(query, limit).get_unique()
+
     return {"paraphrase": unique_btress}

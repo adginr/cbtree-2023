@@ -1,6 +1,6 @@
 from typing import Optional
 import pydantic
-from nltk.tree.tree import Tree
+from nltk.tree.tree import Tree  # type: ignore
 
 
 class CBTree(pydantic.BaseModel):
@@ -16,6 +16,6 @@ class ParaphraseRequest(pydantic.BaseModel):
     limit: int
 
     @pydantic.validator("query")
-    def validate_query(cls, v):
+    def validate_query(cls, v: str) -> str:
         Tree.fromstring(v)
         return v

@@ -1,4 +1,4 @@
-from typing import Iterable
+from typing import Iterable, Iterator
 from nltk import Tree
 import pydantic
 import itertools
@@ -23,12 +23,12 @@ class ProcessTree:
         self.limit = limit
 
     @staticmethod
-    def _get_nps(tree: Tree) -> list[ParentNode]:
+    def _get_nps(tree: Tree) -> Iterator[ParentNode]:
         """
         Return a list of parents position and its childs positions
         if parent is 'NP' and its child 'NP' and separated with either ',' or 'CC'=(and|or)
         """
-        target_parent_with_its_child_positions: list[ParentNode] = []
+        # target_parent_with_its_child_positions: list[ParentNode] = []
 
         for pos in tree.treepositions():
             node = tree[pos]
@@ -46,24 +46,25 @@ class ProcessTree:
                 childs_pos_list = list(
                     (*pos, i) for i in range(len(node)) if i % 2 == 0
                 )
-                target_parent_with_its_child_positions.append(
-                    ParentNode(parent_pos=pos, childs_pos_list=childs_pos_list)
-                )
-        return target_parent_with_its_child_positions
+                # target_parent_with_its_child_positions.append(
+                #     ParentNode(parent_pos=pos, childs_pos_list=childs_pos_list)
+                # )
+                yield ParentNode(parent_pos=pos, childs_pos_list=childs_pos_list)
+        # return target_parent_with_its_child_positions
 
     @staticmethod
-    def _format_str(tree: Tree):
-        return re.sub("[\t\s]{2,}", " ", re.sub("[\r\n]", "", str(tree)))
+    def _format_str(tree: Tree) -> str:
+        return re.sub(r"[\t\s]{2,}", " ", re.sub("[\r\n]", "", str(tree)))
 
     @staticmethod
     def _shuttle_tree_pos(
         tree: Tree,
         a_positions: Iterable[TREE_POSITION],
         b_positions: Iterable[TREE_POSITION],
-    ):
+    ) -> Tree:
         """Update an arbitrary tree with new positions"""
 
-        updated_tree = tree.copy(deep=Tree)
+        updated_tree = tree.copy(deep=True)
 
         for a, b in zip(a_positions, b_positions):
             if a != b:
@@ -71,13 +72,13 @@ class ProcessTree:
 
         return updated_tree
 
-    def get_unique(self) -> list[dict[str]]:
+    def get_unique(self) -> list[dict[str, str]]:
         """Return unique up to self.limit tree representations"""
-        result: list[dict[str]] = []
+        result: list[dict[str, str]] = []
         nps_nodes = self._get_nps(self.tree)
 
         # TODO Process multiple variation
-        first_node = nps_nodes[0]
+        first_node = next(nps_nodes)
 
         first_node.childs_pos_list
         # Generate possible posititions
